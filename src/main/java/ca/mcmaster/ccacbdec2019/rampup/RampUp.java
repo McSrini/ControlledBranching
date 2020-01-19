@@ -85,6 +85,7 @@ public class RampUp {
         cplex.solve ();
         logger.info ("leaf count at the end of ramp up "+  cplex.getNnodesLeft() + " leaf list size "+  nodehandler.leafList.size());
         logger.info ("nodes processed by ramp up " + cplex.getNnodes64()) ;
+        logger.info ("nonleaf nodes remaining in the  ramped up tree " + getNumberOfNonleafNodes()) ;
     }
     
     public void end () {
@@ -94,6 +95,8 @@ public class RampUp {
     public double getLPRelax () throws IloException{
         return cplex.getBestObjValue();
     }
+    
+
     
     public IloCplex getRampedUpTree () {
         return cplex;
@@ -115,5 +118,22 @@ public class RampUp {
         return branchhandler.rootAttachment;
     }
     
+    private int getNumberOfNonleafNodes (){
+         return getNumberOfNonleafNodes (getRootNode() );
+    }
     
+        
+    private int getNumberOfNonleafNodes (NodeAttachment subTreeRoot){
+        int count = ZERO;
+        
+        if (null!=subTreeRoot){
+            if (subTreeRoot.leftChildReference!=null || subTreeRoot.rightChildReference!=null){
+                count = ONE + 
+                        getNumberOfNonleafNodes(subTreeRoot.leftChildReference)+ 
+                        getNumberOfNonleafNodes (subTreeRoot.rightChildReference);
+            }
+        }
+                
+        return count;
+    }
 }
