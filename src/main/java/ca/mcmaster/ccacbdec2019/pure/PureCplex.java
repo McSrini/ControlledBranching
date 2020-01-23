@@ -67,8 +67,10 @@ public class PureCplex {
         CplexUtilities.setConfigurationParameters_forSolve (cplex);
         
         cplex.setParam( IloCplex.Param.TimeLimit, SIXTY *SIXTY);
-        if (STARTING_CUTOFF_FOR_PURE_CPLEX < BILLION) 
+        if (STARTING_CUTOFF_FOR_PURE_CPLEX < BILLION) {
             cplex.setParam( IloCplex.Param.MIP.Tolerances.UpperCutoff, STARTING_CUTOFF_FOR_PURE_CPLEX ) ;
+            logger.info ("STARTING_CUTOFF_FOR_PURE_CPLEX " + STARTING_CUTOFF_FOR_PURE_CPLEX) ;
+        }
         
         System.out.println("Pure solver  starting   ") ;
         logger.info("Pure solver  starting   ") ;
