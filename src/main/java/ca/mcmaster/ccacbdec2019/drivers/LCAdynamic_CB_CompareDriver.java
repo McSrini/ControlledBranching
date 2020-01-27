@@ -88,7 +88,8 @@ public class LCAdynamic_CB_CompareDriver {
         //iTree.print(); 
         
         logger.info ("Reincarnator full tree start" ) ;
-        System.out.println("Reincarnator full tree start" + LocalDateTime.now()) ;        
+        System.out.println("Reincarnator full tree start" + LocalDateTime.now()) ;       
+        logger.info ("number of nonleaf nodes in the CB instruction tree is " + iTree.getNumberOfNonLeafNodes() );
                 
 
         Reincarnator reincarnator = new Reincarnator (iTree);
