@@ -87,15 +87,19 @@ public class LCAdynamic_CB_CompareDriver {
         InstructionTree iTree = cbInstructionTreeCreator.getCBInstructionTree();
         //iTree.print(); 
         
+        //end the ramp up, we no longer need it 
+        rampup.end();
+        
         logger.info ("Reincarnator full tree start" ) ;
         System.out.println("Reincarnator full tree start" + LocalDateTime.now()) ;       
         logger.info ("number of nonleaf nodes in the CB instruction tree is " + iTree.getNumberOfNonLeafNodes() );
                 
 
         Reincarnator reincarnator = new Reincarnator (iTree);
-        if (rampup.isFeasible()) {
-            logger.info ("reincarnate with best known solution as cutoff " + rampup.getBestKnownSolution());
-            reincarnator.reincarnate(rampup.getBestKnownSolution());
+        if (bestSolutionFoundByRampup < BILLION) {            
+            //feasible ramp up
+            logger.info ("reincarnate with best known solution as cutoff " + bestSolutionFoundByRampup);
+            reincarnator.reincarnate(bestSolutionFoundByRampup);
         }else {
             logger.info ("reincarnate with no cutoff");
             reincarnator.reincarnate();
