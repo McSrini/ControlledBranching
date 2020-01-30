@@ -61,11 +61,15 @@ public class CplexUtilities {
         cplex.setParam(IloCplex.Param.MIP.Strategy.File , FILE_STRATEGY_DISK_COMPRESSED);            
     }
     
+    public static CplexObjectWith_LPEstimate getMIPWithBoundsChanged (NodeAttachment node , double cutoff){
+        return new CplexObjectWith_LPEstimate (node, cutoff);
+    }
+    
     //given a node attachment, apply its bounds on the original MIP
     // this cplex object will become one candidate in the round robin list
     //
-    //the cutoff is the best solution found during ramp up
-    public static CplexObjectWith_LPEstimate getMIPWithBoundsChanged (NodeAttachment node, double cutoff) throws IloException {
+    //the initail cutoff is the best solution found during ramp up
+    public static IloCplex promoteNode_To_ILoCplex (NodeAttachment node , double cutoff) throws IloException {
         IloCplex cplex = new IloCplex ();
         cplex.importModel(  MIP_FILENAME);
         
@@ -90,7 +94,7 @@ public class CplexUtilities {
             cplex.setParam( IloCplex.Param.MIP.Tolerances.UpperCutoff, cutoff) ;
         }
         
-        return new CplexObjectWith_LPEstimate (cplex, node.lpRelaxedValue) ;
+        return  cplex ;
     }
     
     private static void getBranchingConditions (NodeAttachment node, Map< String,Double > upperBoundMap, Map< String,Double > lowerBoundMap){

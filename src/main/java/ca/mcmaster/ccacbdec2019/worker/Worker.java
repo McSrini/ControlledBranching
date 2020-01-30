@@ -65,7 +65,7 @@ public class Worker {
         int index = ZERO;
         for (CplexObjectWith_LPEstimate cplexWithLP :  individualProblems ){
             
-            CplexUtilities.setConfigurationParameters_forSolve  (cplexWithLP.cplex);
+            
             
             this.individualProblemsMap.put (index, cplexWithLP);
             index ++;
@@ -122,7 +122,7 @@ public class Worker {
         IloCplex cplex = null;
         if (bestSubProblemID>= ZERO) {
             //this is the problem which won the time quantum allocation
-            cplex = this.individualProblemsMap.get( bestSubProblemID).cplex;
+            cplex = this.individualProblemsMap.get( bestSubProblemID).getCplexObject();
             lowestRemainingObjValue =  this.individualProblemsMap.get( bestSubProblemID).lpRelaxEstimate;
         }
          
@@ -137,7 +137,8 @@ public class Worker {
                 
                 //solve best remaining problem for time quantum
                 long numNodesProcessed_before = cplex.getNnodes64();
-                logger.debug (" numNodesProcessed_before "+ numNodesProcessed_before +   " leafs left is cplex.getNnodesLeft64() " +  cplex.getNnodesLeft64());
+                logger.debug (" numNodesProcessed_before "+ numNodesProcessed_before +   " leafs left is cplex.getNnodesLeft64() " + 
+                        cplex.getNnodesLeft64());
                 
                 cplex.setParam(  IloCplex.Param.TimeLimit,TIME_QUANTUM_SECONDS  );
                 cplex.solve();
@@ -169,7 +170,7 @@ public class Worker {
                 if (BILLION > bestKnownSolution) updateCutoffs(bestKnownSolution);
                 //get next subproblem to solve for 6 minutes
                 bestSubProblemID = getSubProblemWithSmallestBound () ;
-                cplex = this.individualProblemsMap.get( bestSubProblemID).cplex; 
+                cplex = this.individualProblemsMap.get( bestSubProblemID).getCplexObject(); 
                 lowestRemainingObjValue =  this.individualProblemsMap.get( bestSubProblemID).lpRelaxEstimate;
                 
             }//end while
@@ -197,7 +198,9 @@ public class Worker {
     private void updateCutoffs (double cutoff) throws IloException{
         for (CplexObjectWith_LPEstimate cplexWithLPEstimate: individualProblemsMap.values()){
                             
-            cplexWithLPEstimate.cplex.setParam( IloCplex.Param.MIP.Tolerances.UpperCutoff, cutoff) ;
+            cplexWithLPEstimate.updateCutoff(cutoff);
+                    
+                    
             
         }
         
@@ -234,7 +237,7 @@ public class Worker {
     private long getNumberOfLeafsLeft (){
         long result = ZERO;
         for (CplexObjectWith_LPEstimate cplexWithLPEstimate:  individualProblemsMap.values()){
-            result += cplexWithLPEstimate.cplex.getNnodesLeft64();
+            result += cplexWithLPEstimate.getNnodesLeft64();
         }
         
         return result;
