@@ -102,6 +102,9 @@ public class Worker {
             
         }
         
+        logger.info("Printing solution vector ...") ;
+        logger.info ( CplexUtilities.getSolutionVector(cplex));
+        
         cplex.end ();
         System.out.println("Worker completed merged problem ") ;
         logger.info("Worker completed merged problem ") ;

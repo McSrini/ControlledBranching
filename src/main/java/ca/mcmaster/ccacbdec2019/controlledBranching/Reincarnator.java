@@ -155,6 +155,9 @@ public class Reincarnator {
 
             }
 
+            logger.info("Printing solution vector ...") ;
+            logger.info ( CplexUtilities.getSolutionVector(cplex));
+            
             cplex.end ();
             System.out.println("Reincarnate  durationInHours   completed ") ;
             logger.info("Reincarnate  durationInHours   completed ") ;

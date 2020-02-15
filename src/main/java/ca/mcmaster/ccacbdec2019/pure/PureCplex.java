@@ -100,7 +100,8 @@ public class PureCplex {
         }
         
          
-        
+        logger.info("Printing solution vector ...") ;
+        logger.info ( CplexUtilities.getSolutionVector(cplex));
         cplex.end ();
         System.out.println("Pure solver completed ") ;
         logger.info("Pure solver completed ") ;

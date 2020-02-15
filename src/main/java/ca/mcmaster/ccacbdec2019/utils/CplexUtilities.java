@@ -22,6 +22,25 @@ import java.util.Map;
  */
 public class CplexUtilities {
     
+    public static String getSolutionVector  (IloCplex cplex) throws IloException{
+        String result = "\n";
+        if (cplex !=null){
+            IloCplex.Status status = cplex.getStatus();
+            if (IloCplex.Status.Optimal.equals(status) ||IloCplex.Status.Feasible.equals(status) ){
+                //
+                IloLPMatrix lpMatrix = (IloLPMatrix)cplex.LPMatrixIterator().next();
+                IloNumVar[] variables  =lpMatrix.getNumVars();
+                for (IloNumVar var :variables){
+                    //
+                    result+= "" + var.getName() + "="  + cplex.getValue(var)+ "\n";
+                }
+                //
+            }
+        }
+        
+        return result;
+    }
+    
         
     public static Map<String, IloNumVar> getVariables (IloCplex cplex) throws IloException{
         Map<String, IloNumVar> result = new HashMap<String, IloNumVar>();
