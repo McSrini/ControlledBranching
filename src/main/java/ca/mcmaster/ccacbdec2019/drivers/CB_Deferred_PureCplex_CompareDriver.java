@@ -61,7 +61,7 @@ public class CB_Deferred_PureCplex_CompareDriver {
             IloCplex originalMIP = new IloCplex ();
             originalMIP.importModel( MIP_FILENAME);
             (new PureCplex( originalMIP  )).solve();
-            logger.info("Completed solve with pure cplex");
+            logger.info("Completed solve with pure cplex");            
             exit (ZERO);
         }
         
@@ -70,6 +70,7 @@ public class CB_Deferred_PureCplex_CompareDriver {
         logger.info ("RampUp start " ) ;
         RampUp rampup= new RampUp ();
         logger.info ("RampUp  end " ) ;
+        logger.info (" lp relax at the end of ramp up was " + rampup.getLPRelax (  ));
         
         
         //now reincarnate the entire tree
