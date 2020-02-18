@@ -30,9 +30,10 @@ public class CplexUtilities {
                 //
                 IloLPMatrix lpMatrix = (IloLPMatrix)cplex.LPMatrixIterator().next();
                 IloNumVar[] variables  =lpMatrix.getNumVars();
-                for (IloNumVar var :variables){
+                double [] values = cplex.getValues(variables );
+                for (int index = ZERO; index < variables.length; index ++){
                     //
-                    result+= "" + var.getName() + "="  + cplex.getValue(var)+ "\n";
+                    result+= "" + variables[index].getName() + "="  + values[index]+ "\n";
                 }
                 //
             }
