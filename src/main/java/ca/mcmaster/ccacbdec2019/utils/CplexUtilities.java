@@ -119,16 +119,33 @@ public class CplexUtilities {
     
     private static void getBranchingConditions (NodeAttachment node, Map< String,Double > upperBoundMap, Map< String,Double > lowerBoundMap){
         
-        NodeAttachment current = node;
+        NodeAttachment currentNode = node;
         
-        while (current.parentData!=null){
+        while (currentNode.parentData!=null){
             //get branching condition of the current node
-            if (current.isBranchingDirectionDown){
-                upperBoundMap.put(current.branchingVarName ,  current.branchingBound);
+            if (currentNode.isBranchingDirectionDown){
+                if (!upperBoundMap.containsKey( currentNode.branchingVarName )){
+                    upperBoundMap.put(currentNode.branchingVarName ,  currentNode.branchingBound);
+                }else {
+                    //only use if more restrictive
+                    double currentBound = upperBoundMap.get( currentNode.branchingVarName );
+                    if (currentNode.branchingBound < currentBound){
+                        upperBoundMap.put(currentNode.branchingVarName ,  currentNode.branchingBound);
+                    }
+                }
+                
             }else {
-                lowerBoundMap.put(current.branchingVarName ,  current.branchingBound);
+                if (!lowerBoundMap.containsKey(currentNode.branchingVarName )){
+                    lowerBoundMap.put(currentNode.branchingVarName ,  currentNode.branchingBound);
+                }else {
+                    double currentBound = lowerBoundMap.get(currentNode.branchingVarName );
+                    if (currentBound < currentNode.branchingBound){
+                        lowerBoundMap.put(currentNode.branchingVarName ,  currentNode.branchingBound);
+                    }
+                }
+                
             }        
-            current= current.parentData; 
+            currentNode= currentNode.parentData; 
         }                
          
     }
