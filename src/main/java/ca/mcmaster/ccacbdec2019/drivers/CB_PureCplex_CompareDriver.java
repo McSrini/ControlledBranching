@@ -53,6 +53,8 @@ public class CB_PureCplex_CompareDriver {
 
     public static void main(String[] args) throws IloException {
         
+        logger.info (Parameters.getParameterConfiguration()) ;
+        
         if (ONLY_SOLVE_PURE) {
             logger.info("");
             logger.info("Starting solve with pure cplex");
@@ -65,7 +67,7 @@ public class CB_PureCplex_CompareDriver {
         }
         
         //ramp up the MIP
-        logger.info (Parameters.getParameterConfiguration()) ;
+        
         logger.info ("RampUp start " ) ;
         RampUp rampup= new RampUp ();
         logger.info ("RampUp  end " ) ;
